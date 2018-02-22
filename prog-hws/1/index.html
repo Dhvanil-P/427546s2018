@@ -1,3 +1,7 @@
+<!---Name: Dhvanil Patel
+Subject: COMP 4270
+Assignment 1
+*-->
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,7 +35,7 @@
 	      display:inline-block;
 	      }
 	</style>
-	<title>Line Drawer</title>
+	<title>Assignment 1</title>
 	<style>
 	</style>
 </head>
@@ -95,20 +99,13 @@
 		<div id="left_side" style="width: 50%; float: left;">
 		<!-- Left Side HTML -->
 	
-		
-	
-		
-	<canvas height="600" id="myCanvas" style="border:3px solid #010101;" width="1000"></canvas>
+	<canvas height="500" id="myCanvas" style="border:3px solid #010101;" width="1282"></canvas>
 	<script>
 	          //canvas and context variables
 	          var canvas = document.getElementById('myCanvas');
 	          var context = canvas.getContext('2d');
 
-
-
-
-
-	          //for button presses, uses form data
+			//for button presses, uses form data
 	          function drawLineButton(){
 	              
 	              context.clearRect(0,0,canvas.width, canvas.height)
@@ -120,7 +117,7 @@
 	              drawLine(X1, Y1, X2, Y2);
 	          }
 	          
-	          // see README
+	          // 
 	          function drawLine(X1, Y1, X2, Y2){
 	            if(X1 != null && X2 != null && Y1 != null && Y2 != null)
 				{
@@ -152,51 +149,21 @@
 	              
 	          }
 
-
-
-        //for button presses, uses form data
-	/*	function drawCircleButton(){
-			context.clearRect(0,0,canvas.width, canvas.height)
-			var circleData = document.forms["circleForm"];
-			var x0 = parseInt(circleData.elements[1].value);
-			var y0 = parseInt(circleData.elements[2].value);
-			 var r = parseInt(circleData.elements[3].value);
-			drawCircle(x0, y0, r);
-		}
-	     
-			  function drawCircle(x0,y0,r){
-			//initial values
-			var x = r;
-			var y = 0;
-			var d = 1 - x;   // decision variable
-
-			//draw the circle
-			while (x >= y) {
-				drawPixels( x , y , x0 , y0 );
-				y++;
-				if (d <= 0) {
-					d += 2 * y + 1;
-				} else {
-					x--;
-					d += 2 * (y - x) + 1;
-				}
-			}
-        }
-		*/var circleData = document.forms["circleForm"];
+var circleData = document.forms["circleForm"];
 		var x0 = parseInt(circleData.elements[1].value);
 		var y0 = parseInt(circleData.elements[2].value);
 		var r = parseInt(circleData.elements[3].value);
 		
         //for button presses, uses form data
 		function drawCircleButton(){
+			context.clearRect(0,0,canvas.width, canvas.height)
 			x0 = parseInt(circleData.elements[1].value);
 			y0 = parseInt(circleData.elements[2].value);
 			r = parseInt(circleData.elements[3].value);
 			drawCircle(x0, y0, r);
 			stop();
 		}
-		
-		// see README
+		// included resources in README.txt
         function drawCircle(x0,y0,r){
 			//initial values
 			var p = r;
@@ -215,8 +182,6 @@
 				}
 			}
         }
-
-
 		//puts the pixels on the canvas (at each octant)
 		function drawPixels(p , q , x0 , y0){
 			context.fillRect(p + x0, q + y0,1,1);
@@ -229,7 +194,7 @@
 			context.fillRect(q + x0, -p + y0,1,1);
 		}         
 		
-		
+		//Rectangle button function
 		function drawRectangleButton(){
 	              context.clearRect(0,0,canvas.width, canvas.height)
 	              var rectangleData = document.forms["rectangleForm"];
@@ -237,14 +202,7 @@
 	              Y1 = parseInt(rectangleData.elements[2].value);
 	              X2 = parseInt(rectangleData.elements[3].value);
 	              Y2 = parseInt(rectangleData.elements[4].value);
-	              /*     *** for reference ***
-	                  corner 1 --------- corner 2
-	                  |                         |
-	                  |                         |
-	                  |                         |
-	                  |                         |
-	                  corner 4 --------- corner 3     
-	              */
+	           
 	              drawLine(X1, Y1, X1, Y2); //corner 1 to corner 4
 	              drawLine(X1, Y1, X2, Y1); //corner 1 to corner 2
 	              drawLine(X2, Y2, X2, Y1); //corner 3 to corner 2
@@ -272,16 +230,17 @@
 	                  if(cur_err < dy){
 	                      err += dx;
 	                      Y1 += y_dir;
-
-
 	                  }
-
-
 	              }
 	            }
 	              }
 	          }
-			  function drawEllipseButton(){
+
+			  // included resources in README.txt
+
+			  function drawEllipseButton()
+			  {
+				context.clearRect(0,0,canvas.width, canvas.height)
 				//get data from form
 				var ellipseData = document.forms["ellipseForm"];
 				var a = parseInt(ellipseData.elements[1].value);
@@ -347,18 +306,21 @@
 	              Y1 = parseInt(polygonData.elements[2].value);
 	              var numSides = X1;
 	              var radius = Y1;
-	              
 	              var xCenter = parseInt(canvas.width/2);
 	              var yCenter = parseInt(canvas.height/2);context.beginPath();
+
 	   // Map the first vertice to start with
 	      var xPos = xCenter + Y1 * Math.cos(2 * Math.PI * 0 / numSides);
 	      var yPos = yCenter + Y1 * Math.sin(2 * Math.PI * 0 / numSides);
 	      context.moveTo(xPos,yPos);
+
 	   // Loop through the vertices and map the lines
-	      for (i = 1; i <= X1; i++) {
+	      for (i = 1; i <= X1; i++) 
+		  {
 	   // Determine the coordinates of the next vertex
 	      xPos = xCenter + radius * Math.cos(2 * Math.PI * i / numSides);
 	      yPos = yCenter + radius * Math.sin(2 * Math.PI * i / numSides);
+		  
 	   // Set line to the next vertex
 	      context.lineTo(xPos,yPos);
 	      }
