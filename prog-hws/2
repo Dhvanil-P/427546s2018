@@ -1,1 +1,334 @@
 
+<!doctype html>
+<!---Name: Dhvanil Patel
+Subject: COMP 4270
+Assignment 1
+*-->
+
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Assignment 2</title>
+
+ 
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+  <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <style>
+        html {
+            height: 100%;
+        }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+        h1 {
+            font-weight:bold;
+        }
+        #wrapper {
+            margin-left: 1em;
+            width: 50%;
+            height: 100%;
+            float:left; 
+            padding-top: 5em;
+            padding-left: 2em;
+            padding-right: 2em;
+        }
+        #button_wrapper {
+            margin-top: 1em;
+            width: 100%;
+            display: inline-block;
+        }
+        #button_wrapper button {
+            width: 10em;
+            height: 2em;
+            background-color: grey;
+            border: none;
+            color: white;
+            font-size: large;
+            margin-right: 1em;
+        }
+        #button_wrapper button:hover {
+            background-color: lightblue;
+        }
+        #content {
+            margin-top: 2em;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+            border: 1px solid white;
+        }
+        ._form {
+            margin-top: 3em;
+            margin-left: 3em;
+            width: 100%;
+        }
+        
+        ._input {
+            width: 85px;
+            display: inline;
+        }
+        #canvas_wrapper {
+            width: 48%;
+            height: 100%;
+            float: right;
+        }
+        
+        #canvas{
+            border-style: solid;
+            border-width: 2pxx;
+            border-color: black;
+
+        }
+    </style>
+
+    
+</head>
+
+
+        <body bgcolor="#E6E6FA">
+    <div id="wrapper">
+        
+
+            <!-- drawFractal Form, hidden until clicked -->
+            <div id="drawFractal_form" class="_form">
+                <fieldset>
+
+                <h2>Draw Line Fractal</h2>
+            </fieldset>
+            **Ratio set as 1/3**
+            <br>
+                <br>
+                <div style="margin-left: 3em">
+                    Iterations:
+                    <br>
+                    <input type="text" class="form-control _input" name="iterations" id="iterations" placeholder="0">
+                    <br>
+                </div>
+                    <br>
+                    <button class="btn btn-default btn-md" onclick="drawFractal_click()">Draw Line Fractal</button>  
+                       
+            </div>
+
+            <div id="generateWheel_form" class="_form" >
+                    <h2>Generate Wheel Form</h2>
+                    <br>
+                    <div style="margin-left: 3em">
+                      Please Input Driver's Score:  
+                        <input type="number" class="form-control _input" name="driver_score" id="driver_score" placeholder="100">
+                    </div>
+
+                        <br>
+                    <button class="btn btn-default btn-md" onclick="generateWheel_render()">Generate Wheel</button>                   
+            </div>
+
+        </div>     
+    </div>
+
+    <div id="canvas_wrapper" style="padding-top: 5em">
+            <div id="canvas_area">
+                    <canvas id="content" style="border:5px solid #010101;" width="500" height="500">
+            </div>   
+    </div>
+
+</body>
+
+<script>
+
+    //Used for Shape Drawing for storing points entered
+    var points = new Array();
+    var count = 0;
+
+    //Sets up Canvas for Drawing
+    var canvas = document.getElementById("content");
+    var ctx = canvas.getContext('2d');
+    //ctx.translate(0, canvas.height);
+    //ctx.scale(1, -1);
+    
+    //----- View Loading Functions
+    
+    function generateWheel_render(){
+        ctx.clearRect(0, 0, 500, 500);
+        var driverRecord = +document.getElementById("driver_score").value;
+        driverRecord = driverRecord/100;
+
+            if(driverRecord == 0) {
+                alert("Please enter a valid value");
+            } else{
+
+                if(driverRecord == 1.00) {
+                //Driver Score is perfect, render a circle
+                // Circle is 100 units in diameter
+                ctx.beginPath();
+                ctx.arc(250,250,200,0,2*Math.PI);
+                ctx.stroke();
+
+            } else if(driverRecord >= .8) {
+
+                var delta = 200 - (driverRecord * 200);
+
+                var height_radius = 200 - delta;
+                var width_radius = 200 + delta;
+
+                drawEllipseWithBezier(100, 150, width_radius, height_radius);
+
+            } else {
+                //Score is 79 -> below, tire is now a polygonal wheel determined by the 
+                //number of points
+
+                var sides = (driverRecord * 100);
+                //The default tire is a circle with d = 100, r = 50
+                var circumference = 2 * Math.PI * 50;
+                
+                drawPolygon(sides, 200);
+            }
+
+        }
+        
+    }
+    function drawEllipseWithBezier(x, y, w, h) {
+      
+        // Function originally developed by Steve Tranby 
+        // https://stackoverflow.com/questions/2172798/how-to-draw-an-oval-in-html5-canvas
+        
+        var kappa = .5522848,
+            ox = (w / 2) * kappa, // control point offset horizontal
+            oy = (h / 2) * kappa, // control point offset vertical
+            xe = x + w,           // x-end
+            ye = y + h,           // y-end
+            xm = x + w / 2,       // x-middle
+            ym = y + h / 2;       // y-middle
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(x, ym);
+        ctx.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
+        ctx.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
+        ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
+        ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
+        ctx.stroke();
+        ctx.restore();
+    }
+    function drawPolygon(sides, radius){
+    
+        var segment = (Math.PI * 2 * Math.pow(radius, 2))/sides;
+        console.log("Sides: " + sides + "\n Segement Size: " + segment);
+        
+        var points = [];
+        var theta = Math.PI / 2;
+        var d_theta = 2 * Math.PI / sides;
+
+        for(var i = 1; i <= sides; i++) {
+            //Calcuate points
+            theta = theta + d_theta;
+
+            var x = 250 + Math.round(radius * Math.cos(theta));
+            var y = 250 + Math.round(radius * Math.sin(theta));
+
+            points.push({x: x, y: y});
+        }
+        
+        for(var i = 0; i < points.length -1; i++){
+            ctx.beginPath();
+
+            console.log("rendering: " + points[i].x + "," + points[i].y + " to " + points[i+1].x + ", " + points[i+1].y);
+            ctx.moveTo(points[i].x, points[i].y);
+            ctx.lineTo(points[i+1].x,points[i+1].y);    
+            
+            ctx.closePath();
+            ctx.stroke(); 
+
+            if(i == points.length-2){
+               
+                ctx.beginPath();
+               
+
+                console.log("rendering: " + points[i].x + "," + points[i].y + " to " + points[i+1].x + ", " + points[i+1].y);
+                ctx.moveTo(points[(points.length-1)].x, points[(points.length-1)].y);
+                ctx.lineTo(points[0].x,points[0].y);    
+            
+                ctx.closePath();
+                ctx.stroke(); 
+            }
+           
+        }     
+    }
+    function drawLine(x1,y1,x2,y2, color){
+        ctx.fillStyle = '#000';
+        ctx.strokeStyle = color;
+
+        ctx.beginPath();
+        ctx.moveTo(x1, y1); 
+        ctx.lineTo(x2, y2);
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.closePath();  
+    }
+    function drawFractal_click() {
+        
+        if(+document.getElementById("iterations").value == null || +document.getElementById("iterations").value == 0){
+            alert("please enter value");
+            return;
+        }
+
+        var k = 1000000;
+        var a = .1;
+        var loop = 0;
+        var itr = +document.getElementById("iterations").value;
+        var loops = setInterval(function(){
+            
+            loop = loop + 1;
+            ctx.clearRect(0, 0, 500, 500);
+            drawFractal_render(0, 250, 500, 250, Math.PI/3, k);
+            k = k * a;            
+            if(loop == itr){
+                clearInterval(loops);
+            }
+
+        }, 100);      
+    }    
+    function drawFractal_render(x1, y1, x2, y2, a, loop) {
+       
+
+        //base case
+        var x_diff = Math.pow(x2-x1,2);
+        var y_diff = Math.pow(y2-y1,2);
+
+        if( x_diff + y_diff < loop) {
+
+            ctx.beginPath();
+            ctx.moveTo(x1, y1); 
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+            ctx.closePath();  
+            
+            return;
+        }
+
+        var x1_next = x1 + 1/3 * (x2 - x1);
+        var y1_next = y1 + 1/3 * (y2 - y1);
+
+        var x_mid_next = x1 + 2/3 * (x2 - x1);
+        var y_mid_next = y1 + 2/3 * (y2 - y1);
+
+        var x2_next = x1_next + (x_mid_next - x1_next) * Math.cos(-a) - (y_mid_next - y1_next) * Math.sin(-a);
+        var y2_next = y1_next + (y_mid_next - y1_next) * Math.cos(-a) + (x_mid_next - x1_next) * Math.sin(-a);
+        
+
+        drawFractal_render(x1,y1, x1_next,y1_next, a, loop);
+        drawFractal_render(x2_next, y2_next, x_mid_next,y_mid_next, a, loop);
+        drawFractal_render(x_mid_next,y_mid_next, x2,y2, a, loop);
+        drawFractal_render(x1_next,y1_next, x2_next,y2_next, a, loop);
+
+
+    }
+</script>
+</html>
