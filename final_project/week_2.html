@@ -1,0 +1,39 @@
+<!---Name: Dhvanil Patel
+Subject: COMP 4270
+Final Project Week 2
+*-->
+<!DOCTYPE html>
+<html>
+<body>
+<style>
+
+h1{
+font-size: 50px;
+font-family: 'Times New Roman', Times, serif;
+text-decoration: underline;
+text-align: center;
+}
+</style>
+
+<h1> ~Computer Graphics 1 Final Project~ </h1>
+<h2>Front view of house</h2>
+      	<svg id="front_view" width="300" height="300">
+        	<!--main frame -->
+   			<rect id="f_MH" x="25" y="50" width="150" height="125" style="fill:white;stroke:black;stroke-width:1"/>
+            <!--main roof-->
+            <rect id="f_MHR" x="25" y="35" width="150" height="15" style="fill:white;stroke:black;stroke-width:1"/>
+            <!--other house part-->
+            <polygon id="f_A" points="175,25 210,10 245,25 245,175 175,175" style="fill:white;stroke:black;stroke-width:1" />
+            <!-- house door -->
+            <rect id="f_D" x="90" y="145" width="20" height="30" style="fill:white;stroke:black;stroke-width:1"/>
+            <!-- house windows -->
+            <rect id="f_W1" x="50" y="75" width="15" height="25" style="fill:white;stroke:black;stroke-width:1"/>
+            <rect id="f_W2" x="125" y="75" width="15" height="25" style="fill:white;stroke:black;stroke-width:1"/>
+            <rect id="f_W3" x="200" y="45" width="20" height="30" style="fill:white;stroke:black;stroke-width:1"/>
+            <path id="f_W3C" d="M 200 45 A 10 10 -45 0 1 220 45" style="fill:none;stroke:black;stroke-width:1"/>
+            <rect id="f_W4" x="200" y="100" width="20" height="30" style="fill:white;stroke:black;stroke-width:1"/>
+            <path id="f_W4C" d="M 200 100 A 10 10 -45 0 1 220 100" style="fill:none;stroke:black;stroke-width:1"/>
+        </svg>
+        
+</body>
+</html>
